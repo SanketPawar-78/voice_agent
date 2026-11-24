@@ -1,0 +1,25 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: voice
+      POSTGRES_PASSWORD: voice
+      POSTGRES_DB: voiceagent
+    volumes: [pgdata:/var/lib/postgresql/data]
+    ports: ["5432:5432"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U voice -d voiceagent"]
+      interval: 3s
+      retries: 20
+  app:
+    build: .
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://voice:voice@db:5432/voiceagent
+    ports: ["8000:8000"]
+    volumes: ["./recordings:/srv/recordings"]
+    depends_on:
+      db:
+        condition: service_healthy
+volumes:
+  pgdata: {}

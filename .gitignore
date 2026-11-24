@@ -1,0 +1,16 @@
+# secrets and local config
+.env
+.env.*
+!.env.example
+
+# personal data
+recordings/
+*.wav
+
+# python / tooling
+__pycache__/
+*.pyc
+.venv/
+venv/
+.idea/
+.vscode/
